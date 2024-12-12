@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -35,14 +38,30 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
-        compose = true  
+        compose = true
     }
 }
 
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation("androidx.navigation:navigation-compose:2.6.0") // Navigation Compose
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.analytics)
+    // Authentication
+    implementation(libs.play.services.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    // Navigation Compose
+    implementation(libs.androidx.navigation.compose)
+    // Dagger / Hilt -> Injeção de Dependência
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Default Libs
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -58,3 +77,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+kapt {
+    correctErrorTypes = true
+}
+

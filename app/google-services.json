@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "572194153362",
+    "firebase_url": "https://welness-mind-default-rtdb.firebaseio.com",
+    "project_id": "welness-mind",
+    "storage_bucket": "welness-mind.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572194153362:android:84d3b8383bdb8ca826974b",
+        "android_client_info": {
+          "package_name": "ifsp.project.welnessmind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "572194153362-ho6n8607795ogu1oikipaicplkuapn22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ifsp.project.welnessmind",
+            "certificate_hash": "429594d2a65205e8615c2bbff0d4c6ed5d4b40df"
+          }
+        },
+        {
+          "client_id": "572194153362-4bak7sedccgmnbce6fjhfhiomi60sbms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMsyI26VAjPF9bwR3fi7x5a6sk5QLGh_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "572194153362-4bak7sedccgmnbce6fjhfhiomi60sbms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
