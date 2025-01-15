@@ -72,6 +72,7 @@ fun EditScreen(
     val horasEstudo by viewModel.horasEstudo.collectAsState()
     val horasTrabalho by viewModel.horasTrabalho.collectAsState()
     val rbTreino by viewModel.rbTreino.collectAsState()
+    val userName by viewModel.userName.collectAsState()
 
     Column(
         modifier = Modifier
@@ -95,7 +96,7 @@ fun EditScreen(
                     .background(Color.White),
             )
             Text(
-                text = "Olá, Caio!", // TODO recuperar o nome do usuário logado
+                text = "Olá, $userName!",
                 style = MaterialTheme.typography.headlineLarge
             )
         }

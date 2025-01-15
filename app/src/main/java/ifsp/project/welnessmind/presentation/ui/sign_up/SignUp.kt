@@ -1,22 +1,22 @@
 package ifsp.project.welnessmind.presentation.ui.sign_up
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,15 +24,22 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ifsp.project.welnessmind.R
+import ifsp.project.welnessmind.presentation.theme.Blue
+import ifsp.project.welnessmind.presentation.theme.Cyan
+import androidx.compose.foundation.rememberScrollState
 
 @Preview
 @Composable
@@ -45,13 +52,16 @@ fun SignUpScreen(
     val email = viewModel.email.collectAsState()
     val senha = viewModel.password.collectAsState()
     val confirmarSenha = viewModel.confirmPassword.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+    val passwordVisible by viewModel.passwordVisible.collectAsState()
+    val confirmPasswordVisible by viewModel.confirmPasswordVisible.collectAsState()
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Top,
+            .fillMaxSize()
+            .background(Color.White)
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier
@@ -116,6 +126,7 @@ fun SignUpScreen(
             value = nome.value,
             onValueChange = { viewModel.updateNome(it) },
             colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White
             ),
@@ -145,6 +156,7 @@ fun SignUpScreen(
             value = email.value,
             onValueChange = { viewModel.updateEmail(it) },
             colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White
             ),
@@ -174,13 +186,34 @@ fun SignUpScreen(
             value = senha.value,
             onValueChange = { viewModel.updatePassword(it) },
             colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
                 unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White
+                focusedContainerColor = Color.White,
+                focusedIndicatorColor = Blue,
+                unfocusedIndicatorColor = Cyan
             ),
-            visualTransformation = PasswordVisualTransformation(),
-            trailingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) }, // TODO trocar o ícone e implementar 'onCick'
+            visualTransformation = if (passwordVisible) 
+                VisualTransformation.None 
+            else 
+                PasswordVisualTransformation(),
+            trailingIcon = {
+                IconButton(onClick = { viewModel.togglePasswordVisibility() }) {
+                    Icon(
+                        painter = if (passwordVisible)
+                            painterResource(R.drawable.eye_show)
+                        else 
+                            painterResource(R.drawable.eye_hide),
+                        contentDescription = if (passwordVisible) 
+                            "Ocultar senha" 
+                        else 
+                            "Mostrar senha",
+                        tint = Blue
+                    )
+                }
+            },
             modifier = Modifier
                 .heightIn(min = 40.dp)
+                .fillMaxWidth(0.8f)
         )
 
         Spacer(
@@ -205,27 +238,58 @@ fun SignUpScreen(
             value = confirmarSenha.value,
             onValueChange = { viewModel.updateConfirmPassword(it) },
             colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White
             ),
-            visualTransformation = PasswordVisualTransformation(),
-            trailingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) }, // TODO trocar o ícone e implementar função de clique
+            visualTransformation = if (confirmPasswordVisible)
+                VisualTransformation.None
+            else
+                PasswordVisualTransformation(),
+            trailingIcon = {
+                IconButton(onClick = { viewModel.toggleConfirmPasswordVisibility() }) {
+                    Icon(
+                        painter = if (confirmPasswordVisible)
+                            painterResource(R.drawable.eye_show)
+                        else
+                            painterResource(R.drawable.eye_hide),
+                        contentDescription = if (confirmPasswordVisible)
+                            "Ocultar senha"
+                        else
+                            "Mostrar senha",
+                        tint = Blue
+                    )
+                }
+            },
             modifier = Modifier
                 .heightIn(min = 40.dp)
+                .fillMaxWidth(0.8f)
         )
+
+        errorMessage?.let { error ->
+            Text(
+                text = error,
+                color = Color.Red,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
 
         Button(
             onClick = { viewModel.onSignUpClick(openAndPopUp) },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF1E98D7),
+                containerColor = Blue,
                 contentColor = Color.White
             ),
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(40.dp)
+                .fillMaxWidth(0.8f)
+                .padding(vertical = 16.dp)
+                .height(50.dp),
+            shape = RoundedCornerShape(8.dp)
         ) {
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Cadastrar".uppercase())
+            Text(
+                "Cadastrar".uppercase(),
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 

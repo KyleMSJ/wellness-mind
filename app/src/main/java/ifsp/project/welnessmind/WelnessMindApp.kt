@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import ifsp.project.welnessmind.presentation.theme.WelnessMindTheme
 import ifsp.project.welnessmind.presentation.ui.ConditionalScreen
 import ifsp.project.welnessmind.presentation.ui.FirstScreen
+import ifsp.project.welnessmind.presentation.ui.recovery.RecoveryScreen
 import ifsp.project.welnessmind.presentation.ui.sign_in.SignInScreen
 import ifsp.project.welnessmind.presentation.ui.sign_up.SignUpScreen
 
@@ -66,6 +67,13 @@ fun NavGraphBuilder.appGraph(appState: WelnessMindAppState) {
         })
     }
     composable(EDIT_SCREEN) { EditScreen(openAndPopUp = { route, popUp ->
+        appState.navigateAndPopUp(
+            route,
+            popUp
+        )
+    }) }
+
+    composable(RECOVERY_SCREEN) { RecoveryScreen(openAndPopUp = { route, popUp ->
         appState.navigateAndPopUp(
             route,
             popUp

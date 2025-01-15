@@ -19,11 +19,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
 
     buildTypes {
-        release {
+        debug {
+            isDebuggable = true
             isMinifyEnabled = false
+        }
+        release {
+            isMinifyEnabled = true  // "minificação": reduzir o tamanho do código, resultando em um arquivo final mais compacto, para melhorar o desempenho do aplicativo
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -49,6 +54,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore)
     // Authentication
     implementation(libs.play.services.auth)
     implementation(libs.androidx.credentials)
@@ -76,6 +82,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("androidx.multidex:multidex:2.0.1")
+    debugImplementation("com.google.firebase:firebase-auth:22.3.1")
+    debugImplementation("com.google.firebase:firebase-firestore:24.10.1")
 }
 
 kapt {

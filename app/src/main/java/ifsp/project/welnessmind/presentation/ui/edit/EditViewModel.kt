@@ -1,14 +1,35 @@
 package ifsp.project.welnessmind.presentation.ui.edit
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ifsp.project.welnessmind.data.remote.FirestoreService
+import ifsp.project.welnessmind.domain.repository.AccountService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditViewModel @Inject constructor(): ViewModel() {
+class EditViewModel @Inject constructor(
+    private val accountService: AccountService,
+    private val firestoreService: FirestoreService
+): ViewModel() {
+
+    private val _userName = MutableStateFlow("")
+    val userName: StateFlow<String> = _userName.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            if (accountService.hasUser()) {
+                val uid = accountService.currentUserId
+                val name = firestoreService.getUserName(uid)
+                _userName.value = name ?: ""
+            }
+        }
+    }
+
     private val _date = MutableStateFlow("")
     val date: StateFlow<String> = _date.asStateFlow()
 
